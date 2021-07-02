@@ -13,11 +13,20 @@ $config = [
     ],
     'components' => [
         'request' => [
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ],
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'lXL62eFqBuRxofakOWooHmn_XIxq1N9q',
         ],
-        'cache' => [
-            'class' => 'yii\caching\FileCache',
+        'response' => [
+            'class' => 'yii\web\Response',
+            'on beforeSend' => function ($event) {
+                yii::createObject([
+                    'class' => yiier\helpers\ResponseHandler::class,
+                    'event' => $event,
+                ])->formatResponse();
+            },
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -33,23 +42,17 @@ $config = [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
-        'log' => [
-            'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
-                [
-                    'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
-                ],
-            ],
-        ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                [
+                    //一个规则就解决了
+                    'pattern' => '<path:([\w-]+\/?)+>',
+                    'route' => '<path>',
+                ],
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
