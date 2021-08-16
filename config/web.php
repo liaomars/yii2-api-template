@@ -23,7 +23,7 @@ $config = [
             'class' => 'yii\web\Response',
             'on beforeSend' => function ($event) {
                 yii::createObject([
-                    'class' => yiier\helpers\ResponseHandler::class,
+                    'class' => \app\components\ResponseHandler::class,
                     'event' => $event,
                 ])->formatResponse();
             },
